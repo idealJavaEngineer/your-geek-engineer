@@ -1,5 +1,7 @@
 package com.example.yourgeekengineer.services;
 
+import com.example.yourgeekengineer.entities.BlogPost;
+import com.example.yourgeekengineer.entities.Category;
 import com.example.yourgeekengineer.entities.Tag;
 import com.example.yourgeekengineer.repositories.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +16,25 @@ public class TagsService {
 
     @Autowired
     private TagRepository tagRepository;
-    public List<Tag> addNewTags(List<String> tagsName) {
+    public List<Tag> newTagsList(List<String> tagsName, BlogPost blogPost, Category category) {
         List<Tag> allRequiredTags = new ArrayList<>();
         for(String tagName : tagsName) {
             Optional<Tag> tag = tagRepository.findByTagName(tagName);
-            if(tag.isEmpty()) {
-                Tag newTag = saveNewTag(tagName);
-                allRequiredTags.add(newTag);
-            } else {
-                allRequiredTags.add(tag.get());
-            }
+            Tag newTag = null;
+            if(tag.isEmpty())
+                newTag = createNewTag(tagName);
+            else
+                newTag = tag.get();
+            newTag.getBlogPosts().add(blogPost);
+            category.getTags().add(newTag);
+            allRequiredTags.add(newTag);
         }
         return allRequiredTags;
     }
 
-    public Tag saveNewTag(String tagName) {
+    public Tag createNewTag(String tagName) {
         Tag newTag = new Tag();
         newTag.setTagName(tagName);
-        return tagRepository.save(newTag);
+        return newTag;
     }
 }
