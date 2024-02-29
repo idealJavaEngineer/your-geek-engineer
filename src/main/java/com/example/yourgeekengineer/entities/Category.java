@@ -23,11 +23,12 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-    @OneToMany(mappedBy = "category" , fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "category_tag",
+                joinColumns = @JoinColumn(name = "category_id"),
+                inverseJoinColumns = @JoinColumn(name ="tag_id"))
     private List<Tag> tags = new ArrayList<>();
 
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @OneToMany(mappedBy = "category",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<BlogPost> blogPosts = new ArrayList<>();
 }
