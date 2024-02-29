@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "category")
@@ -27,8 +26,9 @@ public class Category {
     @JoinTable(name = "category_tag",
                 joinColumns = @JoinColumn(name = "category_id"),
                 inverseJoinColumns = @JoinColumn(name ="tag_id"))
-    private List<Tag> tags = new ArrayList<>();
+    private Set<Tag> tags = new TreeSet<>();
 
     @OneToMany(mappedBy = "category",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     private List<BlogPost> blogPosts = new ArrayList<>();
 }
