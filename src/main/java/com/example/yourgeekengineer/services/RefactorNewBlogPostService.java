@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Service
@@ -31,7 +32,7 @@ public class RefactorNewBlogPostService {
         try {
             Category category = categoryService.getCategoryByCategoryName(blogPostModal.getCategory());
             //tag list created
-            List<Tag> requiredTags = tagsService.newTagsList(stringToList(blogPostModal.getTags()), blogPost, category);
+            Set<Tag> requiredTags = tagsService.newTagsList(stringToList(blogPostModal.getTags()), blogPost, category);
             //add tag list to blog (bidirectional happens)
             blogPost.setTags(requiredTags);
             logger.info("tags are successfully retrieved");

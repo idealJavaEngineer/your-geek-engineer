@@ -20,7 +20,6 @@ public class AdminController {
 
     @PostMapping("login")
     public boolean adminLogin(@RequestBody UserCredentialModal credential) {
-        System.out.println(credential.getUserName());
         return userValidationService.adminUserValidation(credential);
     }
 

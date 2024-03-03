@@ -13,9 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TagsService {
@@ -28,8 +26,8 @@ public class TagsService {
 
     @Autowired
     private TagRepository tagRepository;
-    public List<Tag> newTagsList(List<String> tagsName, BlogPost blogPost, Category category) {
-        List<Tag> allRequiredTags = new ArrayList<>();
+    public Set<Tag> newTagsList(List<String> tagsName, BlogPost blogPost, Category category) {
+        Set<Tag> allRequiredTags = new HashSet<>();
         for(String tagName : tagsName) {
             Optional<Tag> tag = tagRepository.findByTagName(tagName);
             Tag newTag = null;
@@ -56,8 +54,8 @@ public class TagsService {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(tagModel.getPageNumber(), 10);
         Optional<Tag> tag = tagRepository.findByTagName(tagModel.getTagName());
-        if(!tag.isEmpty()) {
-            List<BlogPost> blogs = entityManager.createQuery("SELECT tg.blogPosts FROM Tag tg WHERE tg.id = :tagId")
+        if(tag.isPresent()) {
+            List<BlogPost> blogs = entityManager.createQuery("SELECT tg.blogPosts FROM Tag tg WHERE tg.id = :tagId", BlogPost.class)
                     .setParameter("tagId", tag.get().getId())
                     .setFirstResult(pageSize * tagModel.getPageNumber())
                     .setMaxResults(pageSize)
