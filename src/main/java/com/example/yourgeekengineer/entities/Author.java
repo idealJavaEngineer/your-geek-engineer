@@ -33,5 +33,6 @@ public class Author {
     private Badge badge;
 
     @OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     private List<BlogPost> blogs = new ArrayList<>();
 }

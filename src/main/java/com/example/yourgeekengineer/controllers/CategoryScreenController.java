@@ -16,14 +16,14 @@ import java.util.Map;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/category")
-public class BlogCategoryScreenController {
+public class CategoryScreenController {
 
     @Autowired
     private TagsService tagsService;
     @Autowired
     private CategoryScreenService categoryScreenService;
 
-    @GetMapping("/info")
+    @PostMapping("/info")
     public ResponseEntity<Map<String, Object>> getBlogsScreenInfo(@RequestBody RequestCategoryModel category) throws Exception {
         try {
             return ResponseEntity.ok().body(categoryScreenService.getAllScreenData(category));
@@ -32,7 +32,7 @@ public class BlogCategoryScreenController {
         }
     }
 
-    @GetMapping("/tag")
+    @PostMapping("/tag")
     public ResponseEntity<List<BlogPost>> getBlogsByTagName(@RequestBody RequestTagModel requestModel) throws Exception{
         try {
             return ResponseEntity.ok().body(tagsService.getAllBlogByTagName(requestModel));
@@ -40,5 +40,6 @@ public class BlogCategoryScreenController {
             throw new Exception(e.getMessage());
         }
     }
+
 
 }

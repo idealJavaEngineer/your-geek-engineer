@@ -38,7 +38,6 @@ public class BlogPost {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "author_id")
-    @JsonIgnore
     private Author author;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
