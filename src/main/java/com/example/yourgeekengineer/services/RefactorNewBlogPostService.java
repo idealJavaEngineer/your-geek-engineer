@@ -7,6 +7,7 @@ import com.example.yourgeekengineer.models.BlogPostModal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,25 +26,33 @@ public class RefactorNewBlogPostService {
     private AuthorService authorService;
     public BlogPost refactorBlogPostModalToEntity(BlogPostModal blogPostModal) throws Exception {
         BlogPost blogPost = new BlogPost();
-        // get all required tags
-        List<Tag> requiredTags = tagsService.addNewTags(stringToList(blogPostModal.getTags()));
-        blogPost.setTags(requiredTags);
-        logger.info("tags are successfully retrieved");
+
         //get required category
         try {
             Category category = categoryService.getCategoryByCategoryName(blogPostModal.getCategory());
-            blogPost.getCategories().add(category);
+            //tag list created
+            List<Tag> requiredTags = tagsService.newTagsList(stringToList(blogPostModal.getTags()), blogPost, category);
+            //add tag list to blog (bidirectional happens)
+            blogPost.setTags(requiredTags);
+            logger.info("tags are successfully retrieved");
+            //bidirectional between category and blogpost is set
+            category.getBlogPosts().add(blogPost);
+            blogPost.setCategory(category);
+
         } catch (Exception e) {
             logger.warning(e.getMessage());
             throw new RuntimeException(e);
         }
+
         //set blog name
         blogPost.setBlogName(blogPostModal.getBlogName());
         //set content
         blogPost.setContent(blogPostModal.getBlogContent());
         //add author
         try {
+            //bidirectional between author and blogpost is created
             blogPost.setAuthor(authorService.getAuthorByUserId(blogPostModal.getUserId()));
+            blogPost.getAuthor().getBlogs().add(blogPost);
         } catch(Exception e) {
             logger.warning(e.getMessage());
             throw new Exception(e.getMessage());
@@ -60,5 +69,4 @@ public class RefactorNewBlogPostService {
     private List<String> stringToList(String tagName) {
         return Arrays.asList(tagName.split(","));
     }
-
 }

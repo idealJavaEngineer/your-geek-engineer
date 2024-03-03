@@ -23,12 +23,7 @@ public class Tag {
     @Column(name = "tag_name")
     private String tagName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    @JsonIgnore
-    private Category category;
-
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "tags", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnore
     private List<BlogPost> blogPosts = new ArrayList<>();
 }

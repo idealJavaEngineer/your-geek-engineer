@@ -1,5 +1,6 @@
 package com.example.yourgeekengineer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class User {
     @Column(name = "email")
     private String email;
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     //unidirectional mapping between user and its role as we dont want to access user from the role

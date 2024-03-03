@@ -22,15 +22,17 @@ public class Author {
     @Column(name = "expertise")
     private String expertise;
 
+    //uni directional relation with user to get user data related to the author
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    //ManyToOne unidirectional relation we don't want badge to get authors list
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "badge_id")
     private Badge badge;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<BlogPost> blogs = new ArrayList<>();
 }

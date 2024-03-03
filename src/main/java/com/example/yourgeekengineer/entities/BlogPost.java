@@ -1,5 +1,6 @@
 package com.example.yourgeekengineer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,14 +36,21 @@ public class BlogPost {
     @Column(name = "content")
     private String content;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany(mappedBy = "blogPosts", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Category> categories = new ArrayList<>();
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "category_id")
+    @JsonIgnore
+    private Category category;
 
-    @ManyToMany(mappedBy = "blogPosts", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "tag_blog_post",
+            joinColumns = @JoinColumn(name = "blog_post_blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> tags = new ArrayList<>();
 
     @Override
@@ -55,7 +63,7 @@ public class BlogPost {
                 ", publishedAt=" + publishedAt +
                 ", content='" + content + '\'' +
                 ", author=" + author +
-                ", categories=" + categories +
+                ", categories=" + category+
                 ", tags=" + tags +
                 '}';
     }

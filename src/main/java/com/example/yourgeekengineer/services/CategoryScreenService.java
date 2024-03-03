@@ -5,6 +5,7 @@ import com.example.yourgeekengineer.models.RequestCategoryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -23,7 +24,8 @@ public class CategoryScreenService {
 
     public Map<String, Object> getAllScreenData(RequestCategoryModel category) {
         Map<String, Object> requiredData = new HashMap<>();
-        Pageable pageable = PageRequest.of(Integer.parseInt(category.getPageNumber()), 10);
+        Sort sort = Sort.by(Sort.Direction.DESC, "blogId");
+        Pageable pageable = PageRequest.of(Integer.parseInt(category.getPageNumber()), 10, sort);
         Category requiredCategory = categoryService.getCategoryByCategoryName(category);
         requiredData.put("tags", categoryService.getAllTagsOfCategory(requiredCategory));
         requiredData.put("blogs", blogPostService.getBlogPostByCategory(requiredCategory, pageable));

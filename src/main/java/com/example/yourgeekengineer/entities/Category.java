@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "category")
@@ -23,11 +22,13 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-    @OneToMany(mappedBy = "category" , fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tag> tags = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "category_tag",
+                joinColumns = @JoinColumn(name = "category_id"),
+                inverseJoinColumns = @JoinColumn(name ="tag_id"))
+    private Set<Tag> tags = new TreeSet<>();
 
-
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<BlogPost> blogPosts = new ArrayList<>();
 }

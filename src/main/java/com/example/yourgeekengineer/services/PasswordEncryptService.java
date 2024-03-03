@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class PasswordEncryptService {
 
     public String bCryptPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt(12));
+        return BCrypt.hashpw(password, BCrypt.gensalt(10));
     }
 
     public boolean matchPasswordWithEncrypt(String password, String hashPw) {

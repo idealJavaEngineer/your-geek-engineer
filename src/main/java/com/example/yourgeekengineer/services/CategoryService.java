@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -17,12 +18,12 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<Tag> getAllTagsOfCategory(Category category) {
+    public Set<Tag> getAllTagsOfCategory(Category category) {
         return category.getTags();
     }
 
     public Tag getFirstValidTag(Category category) {
-        return getAllTagsOfCategory(category).get(0);
+        return getAllTagsOfCategory(category).iterator().next();
     }
 
     public Category getCategoryByCategoryName(RequestCategoryModel category) {
