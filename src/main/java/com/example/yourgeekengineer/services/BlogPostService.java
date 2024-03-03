@@ -1,5 +1,6 @@
 package com.example.yourgeekengineer.services;
 
+import com.example.yourgeekengineer.entities.Author;
 import com.example.yourgeekengineer.entities.BlogPost;
 import com.example.yourgeekengineer.entities.Category;
 import com.example.yourgeekengineer.models.BlogPostModal;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -53,4 +55,16 @@ public class BlogPostService {
         System.out.println(newBlog);
     }
 
+    public BlogPost getBlogPostById(Long id) throws Exception {
+        Optional<BlogPost> blogPost = blogPostRepository.findById(id);
+        if (blogPost.isPresent()) {
+            BlogPost currBlogPost = blogPost.get();
+            Author author = currBlogPost.getAuthor();
+            author.getUser().setEmail("");
+            author.getUser().setUserId(-1);
+            currBlogPost.setAuthor(author);
+            return currBlogPost;
+        }
+        throw new Exception("NO BLOG POST EXIST AT THE REQUIRED PAGE.");
+    }
 }

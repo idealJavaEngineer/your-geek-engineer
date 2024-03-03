@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("admin")
 public class AdminController {
 
-    @Autowired
-    BlogPostService blogPostService;
+
     @Autowired
     UserValidationService userValidationService;
 
@@ -25,9 +24,4 @@ public class AdminController {
         return userValidationService.adminUserValidation(credential);
     }
 
-    @PostMapping("upload-blog")
-    public ResponseEntity<Boolean> uploadNewBlog(@RequestBody BlogPostModal newBlogPost) throws Exception {
-       blogPostService.saveNewBlogPost(newBlogPost);
-       return ResponseEntity.ok().body(true);
-    }
 }
