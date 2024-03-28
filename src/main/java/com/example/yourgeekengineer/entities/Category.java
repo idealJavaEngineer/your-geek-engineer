@@ -2,6 +2,7 @@ package com.example.yourgeekengineer.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,5 @@ public class Category {
     private Set<Tag> tags = new TreeSet<>();
 
     @OneToMany(mappedBy = "category",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
     private List<BlogPost> blogPosts = new ArrayList<>();
 }
