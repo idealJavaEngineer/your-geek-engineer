@@ -4,13 +4,11 @@ import com.example.yourgeekengineer.entities.Author;
 import com.example.yourgeekengineer.entities.BlogPost;
 import com.example.yourgeekengineer.entities.Category;
 import com.example.yourgeekengineer.models.BlogPostModal;
-import com.example.yourgeekengineer.models.RequestCategoryModel;
 import com.example.yourgeekengineer.repositories.BlogPostRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,5 +64,38 @@ public class BlogPostService {
             return currBlogPost;
         }
         throw new Exception("NO BLOG POST EXIST AT THE REQUIRED PAGE.");
+    }
+
+    public int updateBlogPostLikes(Long blogId) throws Exception {
+        //find blogpost, update it and save it.
+        Optional<BlogPost> blogPost = blogPostRepository.findById(blogId);
+        if(blogPost.isPresent()) {
+            BlogPost currBlog = blogPost.get();
+            int currLikes = currBlog.getLikes()+1;
+            currBlog.setLikes(currLikes);
+            blogPostRepository.save(currBlog);
+            return currLikes;
+        } else {
+            throw new Exception("blog post related to this id is not present.");
+        }
+    }
+
+    public int updateBlogPostDislikes(Long blogId) throws Exception {
+        //find blogpost, update it and save it.
+        Optional<BlogPost> blogPost = blogPostRepository.findById(blogId);
+        if(blogPost.isPresent()) {
+            BlogPost currBlog = blogPost.get();
+            int currDislikes = currBlog.getDislikes()+1;
+            currBlog.setDislikes(currDislikes);
+            blogPostRepository.save(currBlog);
+            return currDislikes;
+        } else {
+            throw new Exception("blog post related to this id is not present.");
+        }
+    }
+
+    public List<BlogPost> getAllBlogPost() {
+        List<BlogPost> allBlogPost = blogPostRepository.findAllByOrderByCreatedAtDesc();
+        return allBlogPost;
     }
 }

@@ -39,6 +39,7 @@ public class RefactorNewBlogPostService {
             //bidirectional between category and blogpost is set
             category.getBlogPosts().add(blogPost);
             blogPost.setCategory(category);
+            blogPost.setImageUrl(blogPostModal.getImageUrl());
 
         } catch (Exception e) {
             logger.warning(e.getMessage());
