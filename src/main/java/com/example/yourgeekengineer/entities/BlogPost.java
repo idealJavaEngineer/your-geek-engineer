@@ -1,5 +1,6 @@
 package com.example.yourgeekengineer.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -50,6 +51,15 @@ public class BlogPost {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags = new HashSet<>();
+
+    @Column(name = "likes")
+    private int likes;
+
+    @Column(name ="dislikes")
+    private int dislikes;
+
+    @Column(name="image_url")
+    private String imageUrl;
 
     @Override
     public String toString() {

@@ -26,4 +26,14 @@ public class BlogPostScreenController {
     public ResponseEntity<BlogPost> getBlogPost(@PathVariable("blog-id") String blogId) throws Exception{
         return ResponseEntity.ok().body(blogPostService.getBlogPostById(Long.parseLong(blogId)));
     }
+
+    @PostMapping("/like/{blog-id}")
+    public ResponseEntity<Integer> updateBlogPostLikes(@PathVariable("blog-id") String blogId) throws Exception {
+        return ResponseEntity.ok().body(blogPostService.updateBlogPostLikes(Long.parseLong(blogId)));
+    }
+
+    @PostMapping("/dislike/{blog-id}")
+    public ResponseEntity<Integer> updateBlogPostDisLikes(@PathVariable("blog-id") String blogId) throws Exception {
+        return ResponseEntity.ok().body(blogPostService.updateBlogPostDislikes(Long.parseLong(blogId)));
+    }
 }
