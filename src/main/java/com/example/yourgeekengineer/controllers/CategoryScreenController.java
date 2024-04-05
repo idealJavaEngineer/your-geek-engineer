@@ -4,6 +4,7 @@ package com.example.yourgeekengineer.controllers;
 import com.example.yourgeekengineer.entities.BlogPost;
 import com.example.yourgeekengineer.models.RequestCategoryModel;
 import com.example.yourgeekengineer.models.RequestTagModel;
+import com.example.yourgeekengineer.models.SearchBlogPostInfo;
 import com.example.yourgeekengineer.services.CategoryScreenService;
 import com.example.yourgeekengineer.services.TagsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,13 @@ public class CategoryScreenController {
         }
     }
 
+    @GetMapping("/all-blogs-info/{category-name}")
+    public ResponseEntity<List<SearchBlogPostInfo>> getAllBlogsInfo(@PathVariable("category-name") String categoryName) throws Exception {
+        try {
+            return ResponseEntity.ok().body(categoryScreenService.getAllBlogsInfo(categoryName));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 
 }
