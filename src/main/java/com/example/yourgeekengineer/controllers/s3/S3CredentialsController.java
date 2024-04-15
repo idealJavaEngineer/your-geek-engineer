@@ -1,7 +1,10 @@
 package com.example.yourgeekengineer.controllers.s3;
 
+import com.example.yourgeekengineer.models.UploadBlogCoverImage;
+import com.example.yourgeekengineer.services.BlogPostService;
 import com.example.yourgeekengineer.services.s3.ImageCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,10 +20,24 @@ public class S3CredentialsController {
     @Autowired
     private ImageCrudService imageCrudService;
 
-    @PostMapping("/credentials/upload-file")
-    public ResponseEntity<String> getCredentials(@RequestParam("file") MultipartFile multipartFile) throws Exception {
-        String fileName = imageCrudService.uploadFile(multipartFile);
+    @Autowired
+    private BlogPostService blogPostService;
 
+    @PostMapping("/credentials/upload-file")
+    public ResponseEntity<String> uploadFile(@RequestBody UploadBlogCoverImage coverImage) throws Exception {
+        String fileName = imageCrudService.uploadFile(coverImage.getMultipartFile());
+        blogPostService.updateBlogCoverImageName(fileName, coverImage.getBlogId());
         return ResponseEntity.ok().body(fileName);
     }
+
+    @GetMapping("/credentials/view-file/{file-name}")
+    public ResponseEntity<byte[]> viewFile(@PathVariable("file-name") String fileName) throws Exception{
+        byte[] imageByteStream = imageCrudService.downloadFile(fileName);
+        imageCrudService.deleteFile(fileName);
+        return ResponseEntity.ok()
+                .contentLength(imageByteStream.length)
+                .header("Content-Type","image/jpeg")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                .body(imageByteStream);
+        }
 }

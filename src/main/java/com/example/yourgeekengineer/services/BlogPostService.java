@@ -95,7 +95,17 @@ public class BlogPostService {
     }
 
     public List<BlogPost> getAllBlogPost() {
-        List<BlogPost> allBlogPost = blogPostRepository.findAllByOrderByCreatedAtDesc();
-        return allBlogPost;
+        return blogPostRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public Boolean updateBlogCoverImageName(String fileName, long blogId) {
+        Optional<BlogPost> blogPost = blogPostRepository.findById(blogId);
+        if(blogPost.isPresent()) {
+            BlogPost currBlog = blogPost.get();
+            currBlog.setImageUrl(fileName);
+            blogPostRepository.save(currBlog);
+            return true;
+        }
+        return false;
     }
 }
