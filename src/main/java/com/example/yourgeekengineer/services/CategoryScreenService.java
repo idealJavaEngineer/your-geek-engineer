@@ -4,6 +4,7 @@ import com.example.yourgeekengineer.entities.BlogPost;
 import com.example.yourgeekengineer.entities.Category;
 import com.example.yourgeekengineer.entities.Tag;
 import com.example.yourgeekengineer.models.RequestCategoryModel;
+import com.example.yourgeekengineer.models.SearchBlogPostInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -66,4 +67,13 @@ public class CategoryScreenService {
         return null;
     }
 
+    public List<SearchBlogPostInfo> getAllBlogsInfo(String categoryName) throws Exception {
+        Category currCategory = categoryService.getCategoryByCategoryName(categoryName);
+        List<SearchBlogPostInfo> searchBlogInfoList = new ArrayList<>();
+        for(BlogPost currBlogPost : currCategory.getBlogPosts()) {
+            SearchBlogPostInfo tempSearchBlogInfo = new SearchBlogPostInfo(currBlogPost.getBlogId(), currBlogPost.getBlogName());
+            searchBlogInfoList.add(tempSearchBlogInfo);
+        }
+        return searchBlogInfoList;
+    }
 }
