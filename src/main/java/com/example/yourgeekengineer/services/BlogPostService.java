@@ -46,11 +46,11 @@ public class BlogPostService {
         return blogs;
     }
 
-    public void saveNewBlogPost(BlogPostModal blogPostModal) throws Exception {
+    public long saveNewBlogPost(BlogPostModal blogPostModal) throws Exception {
         BlogPost newBlog = refactorNewBlogPostService.refactorBlogPostModalToEntity(blogPostModal);
         newBlog = blogPostRepository.save(newBlog);
         logger.info("blog is successfully saved");
-        System.out.println(newBlog);
+        return newBlog.getBlogId();
     }
 
     public BlogPost getBlogPostById(Long id) throws Exception {

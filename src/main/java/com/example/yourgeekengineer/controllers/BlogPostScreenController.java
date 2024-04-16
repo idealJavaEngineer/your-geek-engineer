@@ -17,9 +17,9 @@ public class BlogPostScreenController {
     BlogPostService blogPostService;
 
     @PostMapping("/upload-blog")
-    public ResponseEntity<Boolean> uploadNewBlog(@RequestBody BlogPostModal newBlogPost) throws Exception {
-        blogPostService.saveNewBlogPost(newBlogPost);
-        return ResponseEntity.ok().body(true);
+    public ResponseEntity<Long> uploadNewBlog(@RequestBody BlogPostModal newBlogPost) throws Exception {
+        Long blogId = blogPostService.saveNewBlogPost(newBlogPost);
+        return ResponseEntity.ok().body(blogId);
     }
 
     @GetMapping("/{blog-id}")
