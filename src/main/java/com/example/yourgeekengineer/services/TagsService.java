@@ -29,6 +29,7 @@ public class TagsService {
     public Set<Tag> newTagsList(List<String> tagsName, BlogPost blogPost, Category category) {
         Set<Tag> allRequiredTags = new HashSet<>();
         for(String tagName : tagsName) {
+            tagName = tagName.trim();
             Optional<Tag> tag = tagRepository.findByTagName(tagName);
             Tag newTag = null;
             if(tag.isEmpty())

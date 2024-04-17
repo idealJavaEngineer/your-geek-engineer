@@ -72,8 +72,6 @@ public class ImageCrudService implements  FileCrudService {
             } else {
                 throw new Exception("Could not find the file!");
             }
-        } finally {
-
         }
     }
 

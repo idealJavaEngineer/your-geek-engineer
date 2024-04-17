@@ -23,10 +23,10 @@ public class S3CredentialsController {
     @Autowired
     private BlogPostService blogPostService;
 
-    @PostMapping("/credentials/upload-file")
-    public ResponseEntity<String> uploadFile(@RequestBody UploadBlogCoverImage coverImage) throws Exception {
-        String fileName = imageCrudService.uploadFile(coverImage.getMultipartFile());
-        blogPostService.updateBlogCoverImageName(fileName, coverImage.getBlogId());
+    @PostMapping("/credentials/upload-file/{blogId}")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile coverImage, @PathVariable("blogId") String blogId) throws Exception {
+        String fileName = imageCrudService.uploadFile(coverImage);
+        blogPostService.updateBlogCoverImageName(fileName, Long.parseLong(blogId));
         return ResponseEntity.ok().body(fileName);
     }
 
