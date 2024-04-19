@@ -30,12 +30,13 @@ public class TagsService {
         Set<Tag> allRequiredTags = new HashSet<>();
         for(String tagName : tagsName) {
             tagName = tagName.trim();
-            Optional<Tag> tag = tagRepository.findByTagName(tagName);
+            System.out.println(tagName);
+            List<Tag> tags = tagRepository.findAllByTagName(tagName);
             Tag newTag = null;
-            if(tag.isEmpty())
+            if(tags.isEmpty())
                 newTag = createNewTag(tagName);
             else
-                newTag = tag.get();
+                newTag = tags.get(0);
             newTag.getBlogPosts().add(blogPost);
             category.getTags().add(newTag);
             allRequiredTags.add(newTag);
